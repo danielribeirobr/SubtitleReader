@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="app.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Subtitle reader</title>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<label for="text">Text - SRT subtitle text</label>
+				<small id="textHelp" class="form-text text-muted">Paste the subtitle text in the textarea below.</small>
+				<textarea id="text" class="form-control" rows="2" aria-describedby="textHelp"></textarea>
+			</div>
+			<div class="col-md-4">
+				<label for="text">Goto</label>
+				<small id="gotoHelp" class="form-text text-muted">Type here the index of the sentence.</small>
+				<input id="goto" type="text" placeholder="Go to" aria-describedby="gotoHelp"/>
+			</div>
+			<div class="col-md-4">
+				<label for="text">Speed</label>
+				<small id="speedHelp" class="form-text text-muted">Configure the speed of text change.</small>
+				<input id="speed" type="text" placeholder="Speed" aria-describedby="speedHelp"/>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div id="info"></div>		
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div id="display" class="panel"></div>
+			</div>
+		</div>
+
+		<div class="row">		
+			<div class="col-md-6">
+				<div class="card">
+				  <div class="card-body">
+				    <h4 class="card-title">Tips</h4>
+				    <h6 class="card-subtitle mb-2 text-muted">Keyboard shortcuts</h6>
+				    <p class="card-text">
+				    	  <ul class="list-group list-group-flush">
+						    <li class="list-group-item">p: Pause/Play</li>
+						    <li class="list-group-item">,: Previous sentence</li>
+						    <li class="list-group-item">.: Next sentence</li>
+						  </ul>
+				    </p>
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-text">
+						<div id="history"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

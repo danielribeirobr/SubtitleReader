@@ -1,0 +1,28 @@
+body {
+	font-family: 'Lucida Grande', arial, sans-serif;	
+}
+
+#display {
+	font-size: 75px;
+	text-align: center;
+	border: 1px solid #000000;
+	padding: 15px;
+	background: #2F4F4F;
+	color: #FFF8DC;	
+	height: 260px;
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+}
+
+#history {
+
+}
+
+#history .item {
+
+}
+
+#history .itemselected {
+	color: red;
+}
