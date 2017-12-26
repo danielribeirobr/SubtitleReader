@@ -1,14 +1,18 @@
 (function(){
 	'use strict';
 
+	// Configurations used by the translator API (visite https://translate.yandex.net/api/ to get your API key)
+	var apiKey = '';
+	var languagePair = '';
+
 	var subtitleReader = function(text) {
 
 		var
 			arrText = [],
-			lineIndex = 0,
+			lineIndex = -1,
 			status = 0,
 			sleepTime = 0,
-			speed = .8,
+			speed = .6,
 			timeoutVariable = undefined,
 			self = this;
 
@@ -45,6 +49,10 @@
 			displayText(arrText[lineIndex], lineIndex);
 		}
 
+		this.getCurrentText = function() {
+			return arrText[lineIndex];
+		}
+
 		this.previous = function() {
 			if(lineIndex == 0)
 				return;
@@ -61,9 +69,9 @@
 
 		this.toggle = function() {
 			if(status == 1)
-				this.stop();
+				self.stop();
 			else
-				this.start();
+				self.start();
 		}
 
 		this.start = function () {
@@ -89,14 +97,18 @@
 			return lineIndex;
 		}
 
+		this.getStatus = function() {
+			return status;
+		}
+
 		var timeoutFunction = function() {
 			if(lineIndex >= arrText.length) {
 				self.stop();
 				return;
 			}
+			lineIndex++;
 			var line = arrText[lineIndex];
 			displayText(line, lineIndex);
-			lineIndex++;
 			sleepTime = parseInt(60 * line.length / speed);
 			if(status == 1)
 				timeoutVariable = setTimeout(timeoutFunction, sleepTime);
@@ -137,6 +149,44 @@
 		this.setText(text);
 	}
 
+	var translateApi = function(apiKey, languagePair) {
+
+		var _apiKey, _languagePair;
+
+		var constructor = function(apiKey, languagePair) {
+
+			// Get your developer key at https://tech.yandex.com/translate/
+			_apiKey = apiKey;
+
+			// Get the language pair consulting the documentation of yandex API
+			_languagePair = languagePair;
+
+		}
+
+		var getUrl = function(text) {
+			var url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?';
+			url += 'key=' + _apiKey;
+			url += '&text=' + text;
+			url += '&lang=' + _languagePair;
+			return url;
+		}
+
+		this.translate = function(text, callback) {
+			//console.log(getUrl(text));
+			//return;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					callback(JSON.parse(this.responseText).text);
+				}
+			};
+			xhttp.open("POST", getUrl(text), true);
+			xhttp.send();
+		}
+
+		constructor(apiKey, languagePair);
+
+	}
 
 	document.addEventListener('DOMContentLoaded', function(){
 		var r = new subtitleReader();
@@ -189,6 +239,19 @@
 
 		});
 
+		// Used to translate
+		var translate = function() {
+			var previousStatus = r.getStatus();
+			if(previousStatus == 1)
+				r.stop();
+			var t = new translateApi(apiKey, languagePair);
+			t.translate(r.getCurrentText(), function(t){
+				alert(t);
+				if(previousStatus == 1)
+					r.start();
+			});
+		}
+
 		document.addEventListener('keypress', function(e){
 			switch(e.key) {
 				case 'p':
@@ -200,8 +263,16 @@
 				case ',':
 					r.previous();
 					break;
+				case 't':
+					translate();
+					break;
 			}
-		})
+		});
+
+		document.getElementById('btn-play').addEventListener('click', r.toggle);
+		document.getElementById('btn-previous').addEventListener('click', r.previous);
+		document.getElementById('btn-next').addEventListener('click', r.next);
+		document.getElementById('btn-translate').addEventListener('click', translate);
 
 		document.getElementById('text').addEventListener('blur', function(){
 			r.setText(this.value);
